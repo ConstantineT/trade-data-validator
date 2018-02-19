@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.github.constantinet.tradedatavalidator.TradeDataValidatorApplication.TYPES_QUALIFIER;
 
@@ -18,12 +20,12 @@ class InMemoryValidatableTypeRepository implements ValidatableTypeRepository {
 
     @Autowired
     public InMemoryValidatableTypeRepository(@Qualifier(TYPES_QUALIFIER) final Collection<ValidatableType> types) {
-        this.data = null;
-
+        this.data = types.stream()
+                .collect(Collectors.toMap(ValidatableType::getName, Function.identity()));
     }
 
     @Override
     public Optional<ValidatableType> find(final String name) {
-        return null;
+        return Optional.ofNullable(data.get(name));
     }
 }

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.github.constantinet.tradedatavalidator.TradeDataValidatorApplication.VALIDATORS_QUALIFIER;
 
@@ -18,11 +20,12 @@ class InMemoryValidatorRepository implements ValidatorRepository {
 
     @Autowired
     public InMemoryValidatorRepository(@Qualifier(VALIDATORS_QUALIFIER) final Collection<Validator> validators) {
-        this.data = null;
+        this.data = validators.stream()
+                .collect(Collectors.toMap(Validator::getName, Function.identity()));
     }
 
     @Override
     public Optional<Validator> find(final String name) {
-        return null;
+        return Optional.ofNullable(data.get(name));
     }
 }
