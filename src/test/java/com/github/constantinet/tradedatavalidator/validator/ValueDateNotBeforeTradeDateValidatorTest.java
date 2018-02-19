@@ -1,0 +1,180 @@
+package com.github.constantinet.tradedatavalidator.validator;
+
+import com.github.constantinet.tradedatavalidator.message.MessageConstructionStrategy;
+import com.github.constantinet.tradedatavalidator.validation.ValidationResult;
+import org.json.JSONObject;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
+import java.util.Collections;
+
+import static com.github.constantinet.tradedatavalidator.Messages.DefaultMessages.NOT_VALID_MESSAGE;
+import static com.github.constantinet.tradedatavalidator.Messages.Keys.*;
+import static com.github.constantinet.tradedatavalidator.Properties.Names.VALUE_DATE_PROPERTY_NAME;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.core.AllOf.allOf;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+public class ValueDateNotBeforeTradeDateValidatorTest {
+
+    private final static String NAME = "testValidator";
+
+    private ValueDateNotBeforeTradeDateValidator validator;
+    private MessageConstructionStrategy messageConstructionStrategy;
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
+    @Before
+    public void setUp() {
+        messageConstructionStrategy = mock(MessageConstructionStrategy.class);
+        validator = new ValueDateNotBeforeTradeDateValidator(NAME, messageConstructionStrategy);
+    }
+
+
+    @Test
+    public void testValidate_shouldReturnSuccess_whenValueDateIsEqualToTradeDatePassed() {
+        // given
+
+        final JSONObject givenObject = new JSONObject("{\"valueDate\": \"2016-01-02\", \"tradeDate\": \"2016-01-02\"}");
+
+        // when
+        final ValidationResult result = validator.validate(givenObject);
+
+        // then
+        assertThat(result, allOf(
+                hasProperty("succeeded", equalTo(true)),
+                hasProperty("failures", emptyIterable())
+        ));
+    }
+
+    @Test
+    public void testValidate_shouldReturnSuccess_whenValueDateIsAfterTradeDatePassed() {
+        // given
+        when(messageConstructionStrategy.constructMessage(
+                VALUE_DATE_BEFORE_TRADE_DATE_KEY,
+                NOT_VALID_MESSAGE,
+                Collections.singletonList(VALUE_DATE_PROPERTY_NAME))).thenReturn("error");
+        final JSONObject givenObject = new JSONObject("{\"valueDate\": \"2016-01-02\", \"tradeDate\": \"2016-01-01\"}");
+
+        // when
+        final ValidationResult result = validator.validate(givenObject);
+
+        // then
+        assertThat(result, allOf(
+                hasProperty("succeeded", equalTo(true)),
+                hasProperty("failures", emptyIterable())
+        ));
+    }
+
+    @Test
+    public void testValidate_shouldReturnFailure_whenValueDateIsBeforeTradeDatePassed() {
+        // given
+        when(messageConstructionStrategy.constructMessage(
+                VALUE_DATE_BEFORE_TRADE_DATE_KEY,
+                NOT_VALID_MESSAGE,
+                Collections.singletonList(VALUE_DATE_PROPERTY_NAME))).thenReturn("error");
+        final JSONObject givenObject = new JSONObject("{\"valueDate\": \"2016-01-02\", \"tradeDate\": \"2016-01-03\"}");
+
+        // when
+        final ValidationResult result = validator.validate(givenObject);
+
+        // then
+        assertThat(result, allOf(
+                hasProperty("succeeded", equalTo(false)),
+                hasProperty("failures", contains("error")))
+        );
+    }
+
+    @Test
+    public void testValidate_shouldReturnFailure_whenInvalidValueDatePassed() {
+        // given
+        when(messageConstructionStrategy.constructMessage(
+                VALUE_DATE_NOT_BEFORE_TRADE_DATE_VALIDATION_NOT_POSSIBLE_KEY,
+                CAN_NOT_VALIDATE_KEY,
+                Collections.singletonList(VALUE_DATE_PROPERTY_NAME))).thenReturn("error");
+        final JSONObject givenObject = new JSONObject("{\"valueDate\": \"abc\", \"tradeDate\": \"2016-01-01\"}");
+
+        // when
+        final ValidationResult result = validator.validate(givenObject);
+
+        // then
+        assertThat(result, allOf(
+                hasProperty("succeeded", equalTo(false)),
+                hasProperty("failures", contains("error")))
+        );
+    }
+
+    @Test
+    public void testValidate_shouldReturnFailure_whenNoValueDatePassed() {
+        // given
+        when(messageConstructionStrategy.constructMessage(
+                VALUE_DATE_NOT_BEFORE_TRADE_DATE_VALIDATION_NOT_POSSIBLE_KEY,
+                CAN_NOT_VALIDATE_KEY,
+                Collections.singletonList(VALUE_DATE_PROPERTY_NAME))).thenReturn("error");
+        final JSONObject givenObject = new JSONObject("{\"tradeDate\": \"2016-01-01\"}");
+
+        // when
+        final ValidationResult result = validator.validate(givenObject);
+
+        // then
+        assertThat(result, allOf(
+                hasProperty("succeeded", equalTo(false)),
+                hasProperty("failures", contains("error")))
+        );
+    }
+
+    @Test
+    public void testValidate_shouldReturnFailure_whenInvalidTradeDatePassed() {
+        // given
+        when(messageConstructionStrategy.constructMessage(
+                VALUE_DATE_NOT_BEFORE_TRADE_DATE_VALIDATION_NOT_POSSIBLE_KEY,
+                CAN_NOT_VALIDATE_KEY,
+                Collections.singletonList(VALUE_DATE_PROPERTY_NAME))).thenReturn("error");
+        final JSONObject givenObject = new JSONObject("{\"valueDate\": \"2016-01-02\", \"tradeDate\": \"abc\"}");
+
+        // when
+        final ValidationResult result = validator.validate(givenObject);
+
+        // then
+        assertThat(result, allOf(
+                hasProperty("succeeded", equalTo(false)),
+                hasProperty("failures", contains("error")))
+        );
+    }
+
+    @Test
+    public void testValidate_shouldReturnFailure_whenNoTradeDatePassed() {
+        // given
+        when(messageConstructionStrategy.constructMessage(
+                VALUE_DATE_NOT_BEFORE_TRADE_DATE_VALIDATION_NOT_POSSIBLE_KEY,
+                CAN_NOT_VALIDATE_KEY,
+                Collections.singletonList(VALUE_DATE_PROPERTY_NAME))).thenReturn("error");
+        final JSONObject givenObject = new JSONObject("{\"valueDate\": \"2016-01-02\"}");
+
+        // when
+        final ValidationResult result = validator.validate(givenObject);
+
+        // then
+        assertThat(result, allOf(
+                hasProperty("succeeded", equalTo(false)),
+                hasProperty("failures", contains("error")))
+        );
+    }
+
+    @Test
+    public void testValidate_shouldThrowException_whenNullPassed() {
+        expectedException.expect(NullPointerException.class);
+        expectedException.expectMessage("object can not be null");
+
+        // when
+        validator.validate(null);
+
+        // then expected exception
+    }
+
+}
