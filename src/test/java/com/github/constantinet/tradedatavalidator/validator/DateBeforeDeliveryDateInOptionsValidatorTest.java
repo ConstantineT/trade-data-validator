@@ -37,177 +37,47 @@ public class DateBeforeDeliveryDateInOptionsValidatorTest {
 
     @Test
     public void testValidate_shouldReturnSuccess_whenDateIsBeforeDeliveryDatePassed() {
-        // given
-        final JSONObject givenObject = new JSONObject("{\"type\": \"VanillaOption\", \"date\": \"2016-01-02\", " +
-                "\"deliveryDate\": \"2016-01-03\"}");
-
-        // when
-        final ValidationResult result = validator.validate(givenObject);
-
-        // then
-        assertThat(result, allOf(
-                hasProperty("succeeded", equalTo(true)),
-                hasProperty("failures", emptyIterable()))
-        );
+        testValidJson("{\"type\": \"VanillaOption\", \"date\": \"2016-01-02\", \"deliveryDate\": \"2016-01-03\"}");
     }
 
     @Test
     public void testValidate_shouldReturnFailure_whenDateIsEqualToDeliveryDatePassed() {
-        // given
-        when(messageConstructionStrategy.constructMessage(
-                DATE_NOT_BEFORE_DELIVERY_DATE_IN_OPTIONS_KEY,
-                NOT_VALID_MESSAGE,
-                Collections.singletonList(PROPERTY_NAME),
-                PROPERTY_NAME)).thenReturn("error");
-        final JSONObject givenObject = new JSONObject("{\"type\": \"VanillaOption\", \"date\": \"2016-01-02\", " +
-                "\"deliveryDate\": \"2016-01-02\"}");
-
-        // when
-        final ValidationResult result = validator.validate(givenObject);
-
-        // then
-        assertThat(result, allOf(
-                hasProperty("succeeded", equalTo(false)),
-                hasProperty("failures", contains("error"))
-        ));
+        testInvalidJson("{\"type\": \"VanillaOption\", \"date\": \"2016-01-02\", \"deliveryDate\": \"2016-01-02\"}");
     }
 
     @Test
     public void testValidate_shouldReturnFailure_whenDateIsAfterDeliveryDatePassed() {
-        // given
-        when(messageConstructionStrategy.constructMessage(
-                DATE_NOT_BEFORE_DELIVERY_DATE_IN_OPTIONS_KEY,
-                NOT_VALID_MESSAGE,
-                Collections.singletonList(PROPERTY_NAME),
-                PROPERTY_NAME)).thenReturn("error");
-        final JSONObject givenObject = new JSONObject("{\"type\": \"VanillaOption\", \"date\": \"2016-01-02\", " +
-                "\"deliveryDate\": \"2016-01-01\"}");
-
-        // when
-        final ValidationResult result = validator.validate(givenObject);
-
-        // then
-        assertThat(result, allOf(
-                hasProperty("succeeded", equalTo(false)),
-                hasProperty("failures", contains("error"))
-        ));
+        testInvalidJson("{\"type\": \"VanillaOption\", \"date\": \"2016-01-02\", \"deliveryDate\": \"2016-01-01\"}");
     }
 
     @Test
     public void testValidate_shouldReturnFailure_whenInvalidDatePassed() {
-        // given
-        when(messageConstructionStrategy.constructMessage(
-                DATE_BEFORE_DELIVERY_DATE_VALIDATION_NOT_POSSIBLE_KEY,
-                CAN_NOT_VALIDATE_KEY,
-                Collections.singletonList(PROPERTY_NAME),
-                PROPERTY_NAME)).thenReturn("error");
-        final JSONObject givenObject = new JSONObject("{\"type\": \"VanillaOption\", \"date\": \"abc\", " +
-                "\"deliveryDate\": \"2016-01-01\"}");
-
-        // when
-        final ValidationResult result = validator.validate(givenObject);
-
-        // then
-        assertThat(result, allOf(
-                hasProperty("succeeded", equalTo(false)),
-                hasProperty("failures", contains("error")))
-        );
+        testMisformedJson("{\"type\": \"VanillaOption\", \"date\": \"abc\", \"deliveryDate\": \"2016-01-01\"}");
     }
 
     @Test
     public void testValidate_shouldReturnFailure_whenNoDatePassed() {
-        // given
-        when(messageConstructionStrategy.constructMessage(
-                DATE_BEFORE_DELIVERY_DATE_VALIDATION_NOT_POSSIBLE_KEY,
-                CAN_NOT_VALIDATE_KEY,
-                Collections.singletonList(PROPERTY_NAME),
-                PROPERTY_NAME)).thenReturn("error");
-        final JSONObject givenObject = new JSONObject("{\"type\": \"VanillaOption\", \"deliveryDate\": " +
-                "\"2016-01-01\"}");
-
-        // when
-        final ValidationResult result = validator.validate(givenObject);
-
-        // then
-        assertThat(result, allOf(
-                hasProperty("succeeded", equalTo(false)),
-                hasProperty("failures", contains("error")))
-        );
+        testMisformedJson("{\"type\": \"VanillaOption\", \"deliveryDate\": \"2016-01-01\"}");
     }
 
     @Test
     public void testValidate_shouldReturnFailure_whenInvalidDeliveryDatePassed() {
-        // given
-        when(messageConstructionStrategy.constructMessage(
-                DATE_BEFORE_DELIVERY_DATE_VALIDATION_NOT_POSSIBLE_KEY,
-                CAN_NOT_VALIDATE_KEY,
-                Collections.singletonList(PROPERTY_NAME),
-                PROPERTY_NAME)).thenReturn("error");
-        final JSONObject givenObject = new JSONObject("{\"type\": \"VanillaOption\", \"date\": \"2016-01-02\", " +
-                "\"deliveryDate\": \"abc\"}");
-        // when
-        final ValidationResult result = validator.validate(givenObject);
-
-        // then
-        assertThat(result, allOf(
-                hasProperty("succeeded", equalTo(false)),
-                hasProperty("failures", contains("error")))
-        );
+        testMisformedJson("{\"type\": \"VanillaOption\", \"date\": \"2016-01-02\", \"deliveryDate\": \"abc\"}");
     }
 
     @Test
     public void testValidate_shouldReturnFailure_whenNoDeliveryDatePassed() {
-        // given
-        when(messageConstructionStrategy.constructMessage(
-                DATE_BEFORE_DELIVERY_DATE_VALIDATION_NOT_POSSIBLE_KEY,
-                CAN_NOT_VALIDATE_KEY,
-                Collections.singletonList(PROPERTY_NAME),
-                PROPERTY_NAME)).thenReturn("error");
-        final JSONObject givenObject = new JSONObject("{\"type\": \"VanillaOption\", \"date\": \"2016-01-02\"}");
-
-        // when
-        final ValidationResult result = validator.validate(givenObject);
-
-        // then
-        assertThat(result, allOf(
-                hasProperty("succeeded", equalTo(false)),
-                hasProperty("failures", contains("error")))
-        );
+        testMisformedJson("{\"type\": \"VanillaOption\", \"date\": \"2016-01-02\"}");
     }
 
     @Test
     public void testValidate_shouldReturnSuccess_whenNotSupportedTypePassed() {
-        // given
-        final JSONObject givenObject = new JSONObject("{\"type\": \"Spot\"}");
-
-        // when
-        final ValidationResult result = validator.validate(givenObject);
-
-        // then
-        assertThat(result, allOf(
-                hasProperty("succeeded", equalTo(true)),
-                hasProperty("failures", emptyIterable()))
-        );
+        testValidJson("{\"type\": \"Spot\"}");
     }
 
     @Test
     public void testValidate_shouldReturnFailure_whenNoTypePassed() {
-        // given
-        when(messageConstructionStrategy.constructMessage(
-                DATE_BEFORE_DELIVERY_DATE_VALIDATION_NOT_POSSIBLE_KEY,
-                CAN_NOT_VALIDATE_KEY,
-                Collections.singletonList(PROPERTY_NAME),
-                PROPERTY_NAME)).thenReturn("error");
-        final JSONObject givenObject = new JSONObject("{\"date\": \"2016-01-02\", \"deliveryDate\": \"2016-01-03\"}");
-
-        // when
-        final ValidationResult result = validator.validate(givenObject);
-
-        // then
-        assertThat(result, allOf(
-                hasProperty("succeeded", equalTo(false)),
-                hasProperty("failures", contains("error")))
-        );
+        testMisformedJson("{\"date\": \"2016-01-02\", \"deliveryDate\": \"2016-01-03\"}");
     }
 
     @Test
@@ -219,5 +89,57 @@ public class DateBeforeDeliveryDateInOptionsValidatorTest {
         validator.validate(null);
 
         // then expected exception
+    }
+
+    private void testValidJson(final String json) {
+        // given
+        final JSONObject givenObject = new JSONObject(json);
+
+        // when
+        final ValidationResult result = validator.validate(givenObject);
+
+        // then
+        assertThat(result, allOf(
+                hasProperty("succeeded", equalTo(true)),
+                hasProperty("failures", emptyIterable()))
+        );
+    }
+
+    private void testInvalidJson(final String json) {
+        // given
+        when(messageConstructionStrategy.constructMessage(
+                DATE_NOT_BEFORE_DELIVERY_DATE_IN_OPTIONS_KEY,
+                NOT_VALID_MESSAGE,
+                Collections.singletonList(PROPERTY_NAME),
+                PROPERTY_NAME)).thenReturn("error");
+        final JSONObject givenObject = new JSONObject(json);
+
+        // when
+        final ValidationResult result = validator.validate(givenObject);
+
+        // then
+        assertThat(result, allOf(
+                hasProperty("succeeded", equalTo(false)),
+                hasProperty("failures", contains("error"))
+        ));
+    }
+
+    private void testMisformedJson(final String json) {
+        // given
+        when(messageConstructionStrategy.constructMessage(
+                DATE_BEFORE_DELIVERY_DATE_VALIDATION_NOT_POSSIBLE_KEY,
+                CAN_NOT_VALIDATE_KEY,
+                Collections.singletonList(PROPERTY_NAME),
+                PROPERTY_NAME)).thenReturn("error");
+        final JSONObject givenObject = new JSONObject(json);
+
+        // when
+        final ValidationResult result = validator.validate(givenObject);
+
+        // then
+        assertThat(result, allOf(
+                hasProperty("succeeded", equalTo(false)),
+                hasProperty("failures", contains("error")))
+        );
     }
 }
