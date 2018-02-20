@@ -25,7 +25,7 @@ import static com.github.constantinet.tradedatavalidator.Messages.DefaultMessage
 import static com.github.constantinet.tradedatavalidator.Messages.DefaultMessages.TYPE_NOT_SUPPORTED_MESSAGE;
 import static com.github.constantinet.tradedatavalidator.Messages.Keys.CAN_NOT_VALIDATE_KEY;
 import static com.github.constantinet.tradedatavalidator.Messages.Keys.TYPE_NOT_SUPPORTED_KEY;
-import static com.github.constantinet.tradedatavalidator.PropertyNames.TYPE_PROPERTY_NAME;
+import static com.github.constantinet.tradedatavalidator.Properties.Names.TYPE_PROPERTY_NAME;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;

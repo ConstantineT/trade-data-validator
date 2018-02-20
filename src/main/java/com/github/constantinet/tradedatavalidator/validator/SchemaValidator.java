@@ -3,9 +3,13 @@ package com.github.constantinet.tradedatavalidator.validator;
 import com.github.constantinet.tradedatavalidator.validation.ValidationResult;
 import org.everit.json.schema.FormatValidator;
 import org.everit.json.schema.Schema;
+import org.everit.json.schema.ValidationException;
+import org.everit.json.schema.loader.SchemaLoader;
 import org.json.JSONObject;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Objects;
 
 public class SchemaValidator implements Validator {
 
@@ -15,8 +19,13 @@ public class SchemaValidator implements Validator {
     public SchemaValidator(final String name,
                            final JSONObject schema,
                            final Collection<FormatValidator> formatValidators) {
-        this.name = null;
-        this.schema = null;
+        this.name = name;
+
+        final SchemaLoader.SchemaLoaderBuilder builder = SchemaLoader.builder()
+                .schemaJson(schema)
+                .draftV6Support();
+        formatValidators.forEach(builder::addFormatValidator);
+        this.schema = builder.build().load().build();
     }
 
     @Override
@@ -26,6 +35,14 @@ public class SchemaValidator implements Validator {
 
     @Override
     public ValidationResult validate(final JSONObject object) {
-        return null;
+        Objects.requireNonNull(object, "object can not be null");
+
+        try {
+            schema.validate(object);
+        } catch (final ValidationException ex) {
+            return new ValidationResult(false, ex.getAllMessages());
+        }
+
+        return new ValidationResult(true, Collections.emptyList());
     }
 }

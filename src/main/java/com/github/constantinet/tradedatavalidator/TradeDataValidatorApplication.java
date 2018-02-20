@@ -21,7 +21,7 @@ public class TradeDataValidatorApplication {
     @Bean
     public MessageSource messageSource() {
         final ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setBasename("classpath:messages/messages");
+        messageSource.setBasename("messages/messages");
         return messageSource;
     }
 

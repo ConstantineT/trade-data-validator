@@ -24,7 +24,7 @@ import static com.github.constantinet.tradedatavalidator.Messages.DefaultMessage
 import static com.github.constantinet.tradedatavalidator.Messages.DefaultMessages.TYPE_NOT_SUPPORTED_MESSAGE;
 import static com.github.constantinet.tradedatavalidator.Messages.Keys.CAN_NOT_VALIDATE_KEY;
 import static com.github.constantinet.tradedatavalidator.Messages.Keys.TYPE_NOT_SUPPORTED_KEY;
-import static com.github.constantinet.tradedatavalidator.PropertyNames.TYPE_PROPERTY_NAME;
+import static com.github.constantinet.tradedatavalidator.Properties.Names.TYPE_PROPERTY_NAME;
 
 @Service
 class DefaultValidationService implements ValidationService {
@@ -108,6 +108,6 @@ class DefaultValidationService implements ValidationService {
 
     private IndexedFailure getIndexedFailureFromKey(final int index, final String key, final String defaultMsg) {
         final String message = messageConstructionStrategy.constructMessage(key, defaultMsg, null);
-        return new IndexedFailure(index, Arrays.asList(message));
+        return new IndexedFailure(index, Collections.singletonList(message));
     }
 }
