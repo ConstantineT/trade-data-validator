@@ -81,7 +81,7 @@ public class ValueDateAgainstProductTypeValidatorTest {
 
     @Test
     public void testValidate_shouldReturnFailure_whenNoValueDatePassed() {
-        testMisformedJson("{\"type\": \"Spot\"}");
+        testValidJson("{\"type\": \"Spot\"}");
     }
 
     @Test

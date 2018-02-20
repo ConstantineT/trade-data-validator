@@ -56,8 +56,8 @@ public class ValueDateNotBeforeTradeDateValidatorTest {
     }
 
     @Test
-    public void testValidate_shouldReturnFailure_whenNoValueDatePassed() {
-        testMisformedJson("{\"tradeDate\": \"2016-01-01\"}");
+    public void testValidate_shouldReturnSuccess_whenNoValueDatePassed() {
+        testValidJson("{\"tradeDate\": \"2016-01-01\"}");
     }
 
     @Test

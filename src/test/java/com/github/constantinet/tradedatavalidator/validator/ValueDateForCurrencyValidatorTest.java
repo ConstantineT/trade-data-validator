@@ -161,7 +161,17 @@ public class ValueDateForCurrencyValidatorTest {
 
     @Test
     public void testValidate_shouldReturnFailure_whenNoValueDatePassed() {
-        testMisformedJson("{\"ccyPair\": \"EURUSD\"}");
+        // given
+        final JSONObject givenObject = new JSONObject("{\"ccyPair\": \"EURUSD\"}");
+
+        // when
+        final ValidationResult result = validator.validate(givenObject);
+
+        // then
+        assertThat(result, allOf(
+                hasProperty("succeeded", equalTo(true)),
+                hasProperty("failures", emptyIterable()))
+        );
     }
 
     @Test

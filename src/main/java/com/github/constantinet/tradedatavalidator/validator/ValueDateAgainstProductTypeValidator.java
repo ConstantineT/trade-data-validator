@@ -2,6 +2,8 @@ package com.github.constantinet.tradedatavalidator.validator;
 
 import com.github.constantinet.tradedatavalidator.message.MessageConstructionStrategy;
 import com.github.constantinet.tradedatavalidator.validation.ValidationResult;
+import com.github.constantinet.tradedatavalidator.validator.util.ValidatorUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -12,6 +14,7 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeParseException;
 import java.util.*;
+import java.util.function.Predicate;
 
 import static com.github.constantinet.tradedatavalidator.Messages.DefaultMessages.NOT_VALID_MESSAGE;
 import static com.github.constantinet.tradedatavalidator.Messages.Keys.*;
@@ -49,17 +52,16 @@ public class ValueDateAgainstProductTypeValidator implements Validator {
         try {
             final LocalDate current = clock.instant().atOffset(ZoneOffset.UTC).toLocalDate();
 
-            final String valueDateString = object.getString(VALUE_DATE_PROPERTY_NAME);
-            final LocalDate valueDate = LocalDate.parse(valueDateString, STANDARD_DATE_FORMATTER);
 
             final String type = object.getString(TYPE_PROPERTY_NAME);
 
             final List<String> messages = new ArrayList<>();
-
-            if (TYPE_SPOT_VALUE.equals(type) && !valueDate.isBefore(current)) {
-                messages.add(getNotValidMessage(VALUE_DATE_NOT_BEFORE_CURRENT_IN_SPOT_TRADE_KEY));
-            } else if (TYPE_FORWARD_VALUE.equals(type) && !valueDate.isAfter(current)) {
-                messages.add(getNotValidMessage(VALUE_DATE_NOT_AFTER_CURRENT_IN_FORWARD_TRADE_KEY));
+            if (TYPE_SPOT_VALUE.equals(type)) {
+                messages.addAll(getMessagesPerValueDate(date -> !date.isBefore(current),
+                        object, VALUE_DATE_NOT_BEFORE_CURRENT_IN_SPOT_TRADE_KEY));
+            } else if (TYPE_FORWARD_VALUE.equals(type)) {
+                messages.addAll(getMessagesPerValueDate(date -> !date.isAfter(current),
+                        object, VALUE_DATE_NOT_AFTER_CURRENT_IN_FORWARD_TRADE_KEY));
             } else {
                 LOG.warn("can not validate valueDate against type {0}", type);
             }
@@ -69,6 +71,21 @@ public class ValueDateAgainstProductTypeValidator implements Validator {
             LOG.warn("can not fulfill preconditions for checking value date against product type", ex);
             return new ValidationResult(false, Collections.singletonList(getCanNotValidateMessage()));
         }
+    }
+
+    private List<String> getMessagesPerValueDate(final Predicate<LocalDate> predicate,
+                                                 final JSONObject object,
+                                                 final String messageKey) {
+        final Optional<Pair<String, LocalDate>> valueDatePair
+                = ValidatorUtils.getDatePair(object, VALUE_DATE_PROPERTY_NAME, STANDARD_DATE_FORMATTER);
+
+        final List<String> messages = new ArrayList<>();
+        if (valueDatePair.isPresent() && predicate.test(valueDatePair.get().getRight())) {
+            messages.add(getNotValidMessage(messageKey));
+        } else if (!valueDatePair.isPresent()) {
+            LOG.warn("can not validate valueDate against type {0}", object.getString(TYPE_PROPERTY_NAME));
+        }
+        return messages;
     }
 
     private String getNotValidMessage(final String key) {

@@ -2,6 +2,8 @@ package com.github.constantinet.tradedatavalidator.validator;
 
 import com.github.constantinet.tradedatavalidator.message.MessageConstructionStrategy;
 import com.github.constantinet.tradedatavalidator.validation.ValidationResult;
+import com.github.constantinet.tradedatavalidator.validator.util.ValidatorUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -49,8 +51,21 @@ public class ValueDateForCurrencyValidator implements Validator {
         Objects.requireNonNull(object, "object can not be null");
 
         try {
-            final String valueDateString = object.getString(VALUE_DATE_PROPERTY_NAME);
-            final LocalDate valueDate = LocalDate.parse(valueDateString, STANDARD_DATE_FORMATTER);
+            return doValidate(object);
+        } catch (final JSONException | DateTimeParseException | RestClientException | IndexOutOfBoundsException ex) {
+            LOG.warn("can not fulfill preconditions for checking value date against currency", ex);
+            return new ValidationResult(false, Collections.singletonList(getCanNotValidateMessage()));
+        }
+    }
+
+    private ValidationResult doValidate(final JSONObject object) {
+        final Optional<Pair<String, LocalDate>> valueDatePair
+                = ValidatorUtils.getDatePair(object, VALUE_DATE_PROPERTY_NAME, STANDARD_DATE_FORMATTER);
+
+        final List<String> messages = new ArrayList<>();
+        if (valueDatePair.isPresent()) {
+            final String valueDateString = valueDatePair.get().getLeft();
+            final LocalDate valueDate = valueDatePair.get().getRight();
 
             final String currencyPair = object.getString(CURRENCY_PAIR_PROPERTY_NAME);
             final String currency1 = currencyPair.substring(0, 3);
@@ -59,8 +74,6 @@ public class ValueDateForCurrencyValidator implements Validator {
             final LocalDate currencyDate1 = getDateForCurrency(valueDateString, currency1);
             final LocalDate currencyDate2 = getDateForCurrency(valueDateString, currency2);
 
-            final List<String> messages = new ArrayList<>();
-
             if (!valueDate.isEqual(currencyDate1)) {
                 messages.add(getNotValidMessage(currency1));
             }
@@ -68,12 +81,9 @@ public class ValueDateForCurrencyValidator implements Validator {
             if (!valueDate.isEqual(currencyDate2)) {
                 messages.add(getNotValidMessage(currency2));
             }
-
-            return new ValidationResult(messages.isEmpty(), messages);
-        } catch (final JSONException | DateTimeParseException | RestClientException | IndexOutOfBoundsException ex) {
-            LOG.warn("can not fulfill preconditions for checking value date against currency", ex);
-            return new ValidationResult(false, Collections.singletonList(getCanNotValidateMessage()));
         }
+
+        return new ValidationResult(messages.isEmpty(), messages);
     }
 
     private LocalDate getDateForCurrency(final String valueDate, final String currency) {

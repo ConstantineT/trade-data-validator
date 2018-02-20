@@ -35,7 +35,7 @@ public final class Messages {
         public static final String EXERCISE_START_DATE_VALIDATION_NOT_POSSIBLE_KEY
                 = "message.exerciseStartDateForAmericanOptionsValidationNotPossible";
 
-        public Keys() {
+        private Keys() {
             throw new AssertionError("Can not instantiate");
         }
     }
@@ -45,12 +45,12 @@ public final class Messages {
         public static final String CAN_NOT_VALIDATE_MESSAGE = "can not validate";
         public static final String NOT_VALID_MESSAGE = "not valid";
 
-        public DefaultMessages() {
+        private DefaultMessages() {
             throw new AssertionError("Can not instantiate");
         }
     }
 
-    public Messages() {
+    private Messages() {
         throw new AssertionError("Can not instantiate");
     }
 }
