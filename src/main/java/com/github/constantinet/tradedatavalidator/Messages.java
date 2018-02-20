@@ -4,6 +4,9 @@ public final class Messages {
 
     public static final class Keys {
         public static final String TYPE_NOT_SUPPORTED_KEY = "message.typeNotSupported";
+        public static final String CURRENCY_NOT_VALID_KEY = "message.currencyNotValid";
+        public static final String CURRENCY_PAIR_NOT_VALID_KEY = "message.currencyPairNotValid";
+        public static final String DATE_NOT_VALID_KEY = "message.dateNotValid";
         public static final String CAN_NOT_VALIDATE_KEY = "message.validationNotPossible";
 
         public static final String VALUE_DATE_NOT_VALID_FOR_CURRENCY_KEY
