@@ -11,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Collections;
-
 import static com.github.constantinet.tradedatavalidator.Messages.DefaultMessages.NOT_VALID_MESSAGE;
 import static com.github.constantinet.tradedatavalidator.Messages.Keys.*;
 import static com.github.constantinet.tradedatavalidator.Properties.Names.VALUE_DATE_PROPERTY_NAME;
@@ -67,8 +65,8 @@ public class ValueDateForCurrencyValidatorTest {
         when(messageConstructionStrategy.constructMessage(
                 VALUE_DATE_NOT_VALID_FOR_CURRENCY_KEY,
                 NOT_VALID_MESSAGE,
-                Collections.singletonList(VALUE_DATE_PROPERTY_NAME),
-                "EUR")).thenReturn("error");
+                new String[]{"EUR"},
+                VALUE_DATE_PROPERTY_NAME)).thenReturn("error");
         when(restTemplate.getForEntity(anyString(), eq(JSONObject.class), eq("2016-01-02"), eq("EUR")))
                 .thenReturn(ResponseEntity.ok(new JSONObject("{\"date\": \"2016-01-01\"}")));
         when(restTemplate.getForEntity(anyString(), eq(JSONObject.class), eq("2016-01-02"), eq("USD")))
@@ -91,8 +89,8 @@ public class ValueDateForCurrencyValidatorTest {
         when(messageConstructionStrategy.constructMessage(
                 VALUE_DATE_NOT_VALID_FOR_CURRENCY_KEY,
                 NOT_VALID_MESSAGE,
-                Collections.singletonList(VALUE_DATE_PROPERTY_NAME),
-                "USD")).thenReturn("error");
+                new String[]{"USD"},
+                VALUE_DATE_PROPERTY_NAME)).thenReturn("error");
         when(restTemplate.getForEntity(anyString(), eq(JSONObject.class), eq("2016-01-02"), eq("EUR")))
                 .thenReturn(ResponseEntity.ok(new JSONObject("{\"date\": \"2016-01-02\"}")));
         when(restTemplate.getForEntity(anyString(), eq(JSONObject.class), eq("2016-01-02"), eq("USD")))
@@ -115,7 +113,8 @@ public class ValueDateForCurrencyValidatorTest {
         when(messageConstructionStrategy.constructMessage(
                 VALUE_DATE_VALIDATION_AGAINST_CURRENCY_NOT_POSSIBLE_KEY,
                 CAN_NOT_VALIDATE_KEY,
-                Collections.singletonList(VALUE_DATE_PROPERTY_NAME))).thenReturn("error");
+                null,
+                VALUE_DATE_PROPERTY_NAME)).thenReturn("error");
         when(restTemplate.getForEntity(anyString(), eq(JSONObject.class), eq("2016-01-02"), eq("EUR")))
                 .thenReturn(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
         when(restTemplate.getForEntity(anyString(), eq(JSONObject.class), eq("2016-01-02"), eq("USD")))
@@ -137,7 +136,8 @@ public class ValueDateForCurrencyValidatorTest {
         when(messageConstructionStrategy.constructMessage(
                 VALUE_DATE_VALIDATION_AGAINST_CURRENCY_NOT_POSSIBLE_KEY,
                 CAN_NOT_VALIDATE_KEY,
-                Collections.singletonList(VALUE_DATE_PROPERTY_NAME))).thenReturn("error");
+                null,
+                VALUE_DATE_PROPERTY_NAME)).thenReturn("error");
         when(restTemplate.getForEntity(anyString(), eq(JSONObject.class), eq("2016-01-02"), eq("EUR")))
                 .thenReturn(ResponseEntity.ok(new JSONObject("{\"date\": \"2016-01-02\"}")));
         when(restTemplate.getForEntity(anyString(), eq(JSONObject.class), eq("2016-01-02"), eq("USD")))
@@ -200,7 +200,8 @@ public class ValueDateForCurrencyValidatorTest {
         when(messageConstructionStrategy.constructMessage(
                 VALUE_DATE_VALIDATION_AGAINST_CURRENCY_NOT_POSSIBLE_KEY,
                 CAN_NOT_VALIDATE_KEY,
-                Collections.singletonList(VALUE_DATE_PROPERTY_NAME))).thenReturn("error");
+                null,
+                VALUE_DATE_PROPERTY_NAME)).thenReturn("error");
         final JSONObject givenObject = new JSONObject(json);
 
         // when

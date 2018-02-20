@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -78,7 +77,7 @@ public class DateBeforeDeliveryDateInOptionsValidator implements Validator {
         return messageConstructionStrategy.constructMessage(
                 DATE_NOT_BEFORE_DELIVERY_DATE_IN_OPTIONS_KEY,
                 NOT_VALID_MESSAGE,
-                Collections.singletonList(propertyNameToValidate),
+                new String[]{propertyNameToValidate},
                 propertyNameToValidate);
     }
 
@@ -86,7 +85,7 @@ public class DateBeforeDeliveryDateInOptionsValidator implements Validator {
         return messageConstructionStrategy.constructMessage(
                 DATE_BEFORE_DELIVERY_DATE_VALIDATION_NOT_POSSIBLE_KEY,
                 CAN_NOT_VALIDATE_KEY,
-                Collections.singletonList(propertyNameToValidate),
+                new String[]{propertyNameToValidate},
                 propertyNameToValidate);
     }
 }

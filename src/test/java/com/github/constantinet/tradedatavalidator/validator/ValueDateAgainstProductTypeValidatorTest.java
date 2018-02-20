@@ -11,7 +11,6 @@ import org.junit.rules.ExpectedException;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
-import java.util.Collections;
 
 import static com.github.constantinet.tradedatavalidator.Messages.DefaultMessages.NOT_VALID_MESSAGE;
 import static com.github.constantinet.tradedatavalidator.Messages.Keys.*;
@@ -124,7 +123,8 @@ public class ValueDateAgainstProductTypeValidatorTest {
         when(messageConstructionStrategy.constructMessage(
                 key,
                 NOT_VALID_MESSAGE,
-                Collections.singletonList(VALUE_DATE_PROPERTY_NAME))).thenReturn("error");
+                null,
+                VALUE_DATE_PROPERTY_NAME)).thenReturn("error");
         final JSONObject givenObject = new JSONObject(json);
 
         // when
@@ -142,7 +142,8 @@ public class ValueDateAgainstProductTypeValidatorTest {
         when(messageConstructionStrategy.constructMessage(
                 VALUE_DATE_AGAINST_PRODUCT_TYPE_NOT_POSSIBLE_KEY,
                 CAN_NOT_VALIDATE_KEY,
-                Collections.singletonList(VALUE_DATE_PROPERTY_NAME))).thenReturn("error");
+                null,
+                VALUE_DATE_PROPERTY_NAME)).thenReturn("error");
         final JSONObject givenObject = new JSONObject(json);
 
         // when

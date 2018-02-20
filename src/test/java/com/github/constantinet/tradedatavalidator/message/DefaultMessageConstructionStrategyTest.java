@@ -56,7 +56,7 @@ public class DefaultMessageConstructionStrategyTest {
 
         // when
         final String message = messageConstructionStrategy
-                .constructMessage(givenKey, givenDefaultMessage, Arrays.asList("a", "b"));
+                .constructMessage(givenKey, givenDefaultMessage, null, "a", "b");
 
         // then
         assertThat(message, equalTo("#/a/b: " + givenMessage));

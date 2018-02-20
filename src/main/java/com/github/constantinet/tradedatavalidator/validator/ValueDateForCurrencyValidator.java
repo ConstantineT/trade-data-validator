@@ -101,14 +101,15 @@ public class ValueDateForCurrencyValidator implements Validator {
         return messageConstructionStrategy.constructMessage(
                 VALUE_DATE_NOT_VALID_FOR_CURRENCY_KEY,
                 NOT_VALID_MESSAGE,
-                Collections.singletonList(VALUE_DATE_PROPERTY_NAME),
-                currency);
+                new String[]{currency},
+                VALUE_DATE_PROPERTY_NAME);
     }
 
     private String getCanNotValidateMessage() {
         return messageConstructionStrategy.constructMessage(
                 VALUE_DATE_VALIDATION_AGAINST_CURRENCY_NOT_POSSIBLE_KEY,
                 CAN_NOT_VALIDATE_KEY,
-                Collections.singletonList(VALUE_DATE_PROPERTY_NAME));
+                null,
+                VALUE_DATE_PROPERTY_NAME);
     }
 }

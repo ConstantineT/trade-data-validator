@@ -68,13 +68,15 @@ public class ValueDateNotBeforeTradeDateValidator implements Validator {
         return messageConstructionStrategy.constructMessage(
                 VALUE_DATE_BEFORE_TRADE_DATE_KEY,
                 NOT_VALID_MESSAGE,
-                Collections.singletonList(VALUE_DATE_PROPERTY_NAME));
+                null,
+                VALUE_DATE_PROPERTY_NAME);
     }
 
     private String getCanNotValidateMessage() {
         return messageConstructionStrategy.constructMessage(
                 VALUE_DATE_NOT_BEFORE_TRADE_DATE_VALIDATION_NOT_POSSIBLE_KEY,
                 CAN_NOT_VALIDATE_KEY,
-                Collections.singletonList(VALUE_DATE_PROPERTY_NAME));
+                null,
+                VALUE_DATE_PROPERTY_NAME);
     }
 }

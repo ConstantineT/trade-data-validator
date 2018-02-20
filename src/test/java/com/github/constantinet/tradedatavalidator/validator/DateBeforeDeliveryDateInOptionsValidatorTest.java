@@ -8,8 +8,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.util.Collections;
-
 import static com.github.constantinet.tradedatavalidator.Messages.DefaultMessages.NOT_VALID_MESSAGE;
 import static com.github.constantinet.tradedatavalidator.Messages.Keys.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -110,7 +108,7 @@ public class DateBeforeDeliveryDateInOptionsValidatorTest {
         when(messageConstructionStrategy.constructMessage(
                 DATE_NOT_BEFORE_DELIVERY_DATE_IN_OPTIONS_KEY,
                 NOT_VALID_MESSAGE,
-                Collections.singletonList(PROPERTY_NAME),
+                new String[]{PROPERTY_NAME},
                 PROPERTY_NAME)).thenReturn("error");
         final JSONObject givenObject = new JSONObject(json);
 
@@ -129,7 +127,7 @@ public class DateBeforeDeliveryDateInOptionsValidatorTest {
         when(messageConstructionStrategy.constructMessage(
                 DATE_BEFORE_DELIVERY_DATE_VALIDATION_NOT_POSSIBLE_KEY,
                 CAN_NOT_VALIDATE_KEY,
-                Collections.singletonList(PROPERTY_NAME),
+                new String[]{PROPERTY_NAME},
                 PROPERTY_NAME)).thenReturn("error");
         final JSONObject givenObject = new JSONObject(json);
 

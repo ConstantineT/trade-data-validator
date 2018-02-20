@@ -161,7 +161,8 @@ public class ExerciseStartDateForAmericanStyleValidatorTest {
         when(messageConstructionStrategy.constructMessage(
                 key,
                 NOT_VALID_MESSAGE,
-                Collections.singletonList(EXERCISE_START_DATE_PROPERTY_NAME))).thenReturn("error");
+                null,
+                EXERCISE_START_DATE_PROPERTY_NAME)).thenReturn("error");
         final JSONObject givenObject = new JSONObject(json);
 
         // when
@@ -179,7 +180,8 @@ public class ExerciseStartDateForAmericanStyleValidatorTest {
         when(messageConstructionStrategy.constructMessage(
                 EXERCISE_START_DATE_VALIDATION_NOT_POSSIBLE_KEY,
                 CAN_NOT_VALIDATE_KEY,
-                Collections.singletonList(EXERCISE_START_DATE_PROPERTY_NAME))).thenReturn("error");
+                null,
+                EXERCISE_START_DATE_PROPERTY_NAME)).thenReturn("error");
         final JSONObject givenObject = new JSONObject(json);
         // when
         final ValidationResult result = validator.validate(givenObject);

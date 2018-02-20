@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -25,6 +26,8 @@ import static com.github.constantinet.tradedatavalidator.Messages.DefaultMessage
 import static com.github.constantinet.tradedatavalidator.Messages.Keys.CAN_NOT_VALIDATE_KEY;
 import static com.github.constantinet.tradedatavalidator.Messages.Keys.TYPE_NOT_SUPPORTED_KEY;
 import static com.github.constantinet.tradedatavalidator.Properties.Names.TYPE_PROPERTY_NAME;
+import static com.github.constantinet.tradedatavalidator.TradeDataValidatorApplication
+        .DEFAULT_MESSAGE_STRATEGY_QUALIFIER;
 
 @Service
 class DefaultValidationService implements ValidationService {
@@ -38,7 +41,8 @@ class DefaultValidationService implements ValidationService {
     @Autowired
     public DefaultValidationService(final ValidatableTypeRepository validatableTypeRepository,
                                     final ValidatorRepository validatorRepository,
-                                    final MessageConstructionStrategy messageConstructionStrategy) {
+                                    @Qualifier(DEFAULT_MESSAGE_STRATEGY_QUALIFIER)
+                                        final MessageConstructionStrategy messageConstructionStrategy) {
         this.validatableTypeRepository = validatableTypeRepository;
         this.validatorRepository = validatorRepository;
         this.messageConstructionStrategy = messageConstructionStrategy;

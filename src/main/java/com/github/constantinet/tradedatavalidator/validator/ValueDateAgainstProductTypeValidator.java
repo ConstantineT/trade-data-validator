@@ -52,7 +52,6 @@ public class ValueDateAgainstProductTypeValidator implements Validator {
         try {
             final LocalDate current = clock.instant().atOffset(ZoneOffset.UTC).toLocalDate();
 
-
             final String type = object.getString(TYPE_PROPERTY_NAME);
 
             final List<String> messages = new ArrayList<>();
@@ -92,13 +91,15 @@ public class ValueDateAgainstProductTypeValidator implements Validator {
         return messageConstructionStrategy.constructMessage(
                 key,
                 NOT_VALID_MESSAGE,
-                Collections.singletonList(VALUE_DATE_PROPERTY_NAME));
+                null,
+                VALUE_DATE_PROPERTY_NAME);
     }
 
     private String getCanNotValidateMessage() {
         return messageConstructionStrategy.constructMessage(
                 VALUE_DATE_AGAINST_PRODUCT_TYPE_NOT_POSSIBLE_KEY,
                 CAN_NOT_VALIDATE_KEY,
-                Collections.singletonList(VALUE_DATE_PROPERTY_NAME));
+                null,
+                VALUE_DATE_PROPERTY_NAME);
     }
 }

@@ -17,6 +17,7 @@ public class TradeDataValidatorApplication {
 
     public static final String TYPES_QUALIFIER = "types";
     public static final String VALIDATORS_QUALIFIER = "validators";
+    public static final String DEFAULT_MESSAGE_STRATEGY_QUALIFIER = "defaultMessageConstructionStrategy";
 
     @Bean
     public MessageSource messageSource() {

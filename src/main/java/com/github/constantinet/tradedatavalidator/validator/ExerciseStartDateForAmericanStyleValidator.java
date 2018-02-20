@@ -9,7 +9,10 @@ import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 import static com.github.constantinet.tradedatavalidator.Messages.DefaultMessages.NOT_VALID_MESSAGE;
 import static com.github.constantinet.tradedatavalidator.Messages.Keys.*;
@@ -88,13 +91,15 @@ public class ExerciseStartDateForAmericanStyleValidator implements Validator {
         return messageConstructionStrategy.constructMessage(
                 key,
                 NOT_VALID_MESSAGE,
-                Collections.singletonList(EXERCISE_START_DATE_PROPERTY_NAME));
+                null,
+                EXERCISE_START_DATE_PROPERTY_NAME);
     }
 
     private String getCanNotValidateMessage() {
         return messageConstructionStrategy.constructMessage(
                 EXERCISE_START_DATE_VALIDATION_NOT_POSSIBLE_KEY,
                 CAN_NOT_VALIDATE_KEY,
-                Collections.singletonList(EXERCISE_START_DATE_PROPERTY_NAME));
+                null,
+                EXERCISE_START_DATE_PROPERTY_NAME);
     }
 }

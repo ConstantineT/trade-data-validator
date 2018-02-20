@@ -8,8 +8,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.util.Collections;
-
 import static com.github.constantinet.tradedatavalidator.Messages.DefaultMessages.NOT_VALID_MESSAGE;
 import static com.github.constantinet.tradedatavalidator.Messages.Keys.*;
 import static com.github.constantinet.tradedatavalidator.Properties.Names.VALUE_DATE_PROPERTY_NAME;
@@ -100,7 +98,8 @@ public class ValueDateNotBeforeTradeDateValidatorTest {
         when(messageConstructionStrategy.constructMessage(
                 VALUE_DATE_BEFORE_TRADE_DATE_KEY,
                 NOT_VALID_MESSAGE,
-                Collections.singletonList(VALUE_DATE_PROPERTY_NAME))).thenReturn("error");
+                null,
+                VALUE_DATE_PROPERTY_NAME)).thenReturn("error");
         final JSONObject givenObject = new JSONObject(json);
 
         // when
@@ -118,7 +117,8 @@ public class ValueDateNotBeforeTradeDateValidatorTest {
         when(messageConstructionStrategy.constructMessage(
                 VALUE_DATE_NOT_BEFORE_TRADE_DATE_VALIDATION_NOT_POSSIBLE_KEY,
                 CAN_NOT_VALIDATE_KEY,
-                Collections.singletonList(VALUE_DATE_PROPERTY_NAME))).thenReturn("error");
+                null,
+                VALUE_DATE_PROPERTY_NAME)).thenReturn("error");
         final JSONObject givenObject = new JSONObject(json);
 
         // when
