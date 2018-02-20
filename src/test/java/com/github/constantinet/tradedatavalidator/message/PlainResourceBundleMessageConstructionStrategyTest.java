@@ -15,13 +15,13 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class DefaultMessageConstructionStrategyTest {
+public class PlainResourceBundleMessageConstructionStrategyTest {
 
     @Mock
     private MessageSource messageSource;
 
     @InjectMocks
-    private DefaultMessageConstructionStrategy messageConstructionStrategy;
+    private PlainResourceBundleMessageConstructionStrategy messageConstructionStrategy;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -32,7 +32,7 @@ public class DefaultMessageConstructionStrategyTest {
         final String givenKey = "test.error";
         final String givenMessage = "error!";
         final String givenDefaultMessage = "errorDefault!";
-        when(messageSource.getMessage(givenKey, null, DefaultMessageConstructionStrategy.DEFAULT_LOCALE))
+        when(messageSource.getMessage(givenKey, null, PlainResourceBundleMessageConstructionStrategy.DEFAULT_LOCALE))
                 .thenReturn(givenMessage);
 
         // when
@@ -40,7 +40,7 @@ public class DefaultMessageConstructionStrategyTest {
                 .constructMessage(givenKey, givenDefaultMessage, null);
 
         // then
-        assertThat(message, equalTo("#: " + givenMessage));
+        assertThat(message, equalTo(givenMessage));
     }
 
     @Test
@@ -50,7 +50,7 @@ public class DefaultMessageConstructionStrategyTest {
         final String[] params = new String[]{"test"};
         final String givenMessage = "error!";
         final String givenDefaultMessage = "errorDefault!";
-        when(messageSource.getMessage(givenKey, params, DefaultMessageConstructionStrategy.DEFAULT_LOCALE))
+        when(messageSource.getMessage(givenKey, params, PlainResourceBundleMessageConstructionStrategy.DEFAULT_LOCALE))
                 .thenReturn(givenMessage);
 
         // when
@@ -58,24 +58,7 @@ public class DefaultMessageConstructionStrategyTest {
                 .constructMessage(givenKey, givenDefaultMessage, params);
 
         // then
-        assertThat(message, equalTo("#: " + givenMessage));
-    }
-
-    @Test
-    public void testConstructMessage_shouldReturnCorrectMessage_whenValidKeyAndPathValuesPassed() {
-        // given
-        final String givenKey = "test.error";
-        final String givenMessage = "error!";
-        final String givenDefaultMessage = "errorDefault!";
-        when(messageSource.getMessage(givenKey, null, DefaultMessageConstructionStrategy.DEFAULT_LOCALE))
-                .thenReturn(givenMessage);
-
-        // when
-        final String message = messageConstructionStrategy
-                .constructMessage(givenKey, givenDefaultMessage, null, "a", "b");
-
-        // then
-        assertThat(message, equalTo("#/a/b: " + givenMessage));
+        assertThat(message, equalTo(givenMessage));
     }
 
     @Test
@@ -83,7 +66,7 @@ public class DefaultMessageConstructionStrategyTest {
         // given
         final String givenKey = "test.error";
         final String givenDefaultMessage = "errorDefault!";
-        when(messageSource.getMessage(givenKey, null, DefaultMessageConstructionStrategy.DEFAULT_LOCALE))
+        when(messageSource.getMessage(givenKey, null, PlainResourceBundleMessageConstructionStrategy.DEFAULT_LOCALE))
                 .thenThrow(new NoSuchMessageException("test"));
 
         // when
@@ -91,7 +74,7 @@ public class DefaultMessageConstructionStrategyTest {
                 .constructMessage(givenKey, givenDefaultMessage, null);
 
         // then
-        assertThat(message, equalTo("#: " + givenDefaultMessage));
+        assertThat(message, equalTo(givenDefaultMessage));
     }
 
     @Test
