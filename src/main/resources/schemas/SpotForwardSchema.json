@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Spot and Forward Schema",
+  "description": "Schema for Spot and Forward types",
+  "type": "object",
+  "properties": {
+    "customer": {
+      "$id": "/properties/customer",
+      "type": "string",
+      "enum": ["PLUTO1", "PLUTO2"]
+    },
+    "ccyPair": {
+      "$id": "/properties/ccyPair",
+      "type": "string",
+      "format": "currency-pair"
+    },
+    "type": {
+      "$id": "/properties/type",
+      "type": "string",
+      "enum": ["Spot", "Forward"]
+    },
+    "direction": {
+      "$id": "/properties/direction",
+      "type": "string",
+      "enum": ["BUY", "SELL"]
+    },
+    "tradeDate": {
+      "$id": "/properties/tradeDate",
+      "type": "string",
+      "format": "date"
+    },
+    "amount1": {
+      "$id": "/properties/amount1",
+      "type": "number",
+      "multipleOf": 0.01
+    },
+    "amount2": {
+      "$id": "/properties/amount2",
+      "type": "number",
+      "multipleOf": 0.01
+    },
+    "rate": {
+      "$id": "/properties/rate",
+      "type": "number",
+      "multipleOf": 0.01
+    },
+    "valueDate": {
+      "$id": "/properties/valueDate",
+      "type": "string",
+      "format": "date"
+    },
+    "legalEntity": {
+      "$id": "/properties/legalEntity",
+      "type": "string",
+      "enum": ["CS Zurich"]
+    },
+    "trader": {
+      "$id": "/properties/trader",
+      "type": "string"
+    }
+  },
+  "required": [
+    "customer",
+    "ccyPair",
+    "type",
+    "direction",
+    "tradeDate",
+    "amount1",
+    "amount2",
+    "rate",
+    "valueDate",
+    "legalEntity",
+    "trader"
+  ]
+}

@@ -1,0 +1,131 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Options Schema",
+  "description": "Schema for Options type",
+  "type": "object",
+  "properties": {
+    "customer": {
+      "$id": "/properties/customer",
+      "type": "string",
+      "enum": ["PLUTO1", "PLUTO2"]
+    },
+    "ccyPair": {
+      "$id": "/properties/ccyPair",
+      "type": "string",
+      "format": "currency-pair"
+    },
+    "type": {
+      "$id": "/properties/type",
+      "type": "string",
+      "enum": ["VanillaOption", "Forward"]
+    },
+    "style": {
+      "$id": "/properties/style",
+      "type": "string",
+      "enum": ["AMERICAN", "EUROPEAN"]
+    },
+    "direction": {
+      "$id": "/properties/direction",
+      "type": "string",
+      "enum": ["BUY", "SELL"]
+    },
+    "strategy": {
+      "$id": "/properties/strategy",
+      "type": "string"
+    },
+    "tradeDate": {
+      "$id": "/properties/tradeDate",
+      "type": "string",
+      "format": "date"
+    },
+    "amount1": {
+      "$id": "/properties/amount1",
+      "type": "number",
+      "multipleOf": 0.01
+    },
+    "amount2": {
+      "$id": "/properties/amount2",
+      "type": "number",
+      "multipleOf": 0.01
+    },
+    "rate": {
+      "$id": "/properties/rate",
+      "type": "number",
+      "multipleOf": 0.01
+    },
+    "deliveryDate": {
+      "$id": "/properties/deliveryDate",
+      "type": "string",
+      "format": "date"
+    },
+    "expiryDate": {
+      "$id": "/properties/expiryDate",
+      "type": "string",
+      "format": "date"
+    },
+    "valueDate": {
+      "$id": "/properties/valueDate",
+      "type": "string",
+      "format": "date"
+    },
+    "excerciseStartDate": {
+      "$id": "/properties/excerciseStartDate",
+      "type": "string",
+      "format": "date"
+    },
+    "payCcy": {
+      "$id": "/properties/payCcy",
+      "type": "string",
+      "format": "currency"
+    },
+    "premium": {
+      "$id": "/properties/premium",
+      "type": "number",
+      "multipleOf": 0.01
+    },
+    "premiumCcy": {
+      "$id": "/properties/premiumCcy",
+      "type": "string",
+      "format": "currency"
+    },
+    "premiumType": {
+      "$id": "/properties/premiumType",
+      "type": "string"
+    },
+    "premiumDate": {
+      "$id": "/properties/premiumDate",
+      "type": "string",
+      "format": "date"
+    },
+    "legalEntity": {
+      "$id": "/properties/legalEntity",
+      "type": "string",
+      "enum": ["CS Zurich"]
+    },
+    "trader": {
+      "$id": "/properties/trader",
+      "type": "string"
+    }
+  },
+  "required": [
+    "customer",
+    "ccyPair",
+    "type",
+    "style",
+    "direction",
+    "strategy",
+    "tradeDate",
+    "amount1",
+    "amount2",
+    "rate",
+    "deliveryDate",
+    "expiryDate",
+    "payCcy",
+    "premium",
+    "premiumCcy",
+    "premiumType",
+    "premiumDate",
+    "legalEntity",
+    "trader"
+  ]
+}
