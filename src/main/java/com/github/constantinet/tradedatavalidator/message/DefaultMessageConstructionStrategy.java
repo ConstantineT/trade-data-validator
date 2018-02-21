@@ -14,8 +14,10 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-@Component
-class DefaultMessageConstructionStrategy implements MessageConstructionStrategy {
+import static com.github.constantinet.tradedatavalidator.ComponentNames.DEFAULT_MESSAGE_STRATEGY_QUALIFIER;
+
+@Component(DEFAULT_MESSAGE_STRATEGY_QUALIFIER)
+public class DefaultMessageConstructionStrategy implements MessageConstructionStrategy {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultMessageConstructionStrategy.class);
 

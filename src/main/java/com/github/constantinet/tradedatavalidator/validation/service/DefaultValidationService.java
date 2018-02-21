@@ -21,13 +21,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.github.constantinet.tradedatavalidator.ComponentNames.DEFAULT_MESSAGE_STRATEGY_QUALIFIER;
 import static com.github.constantinet.tradedatavalidator.Messages.DefaultMessages.CAN_NOT_VALIDATE_MESSAGE;
 import static com.github.constantinet.tradedatavalidator.Messages.DefaultMessages.TYPE_NOT_SUPPORTED_MESSAGE;
 import static com.github.constantinet.tradedatavalidator.Messages.Keys.CAN_NOT_VALIDATE_KEY;
 import static com.github.constantinet.tradedatavalidator.Messages.Keys.TYPE_NOT_SUPPORTED_KEY;
 import static com.github.constantinet.tradedatavalidator.Properties.Names.TYPE_PROPERTY_NAME;
-import static com.github.constantinet.tradedatavalidator.TradeDataValidatorApplication
-        .DEFAULT_MESSAGE_STRATEGY_QUALIFIER;
 
 @Service
 class DefaultValidationService implements ValidationService {

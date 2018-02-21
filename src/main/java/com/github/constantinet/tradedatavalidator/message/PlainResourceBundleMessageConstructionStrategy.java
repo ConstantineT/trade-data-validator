@@ -10,8 +10,11 @@ import org.springframework.stereotype.Component;
 import java.util.Locale;
 import java.util.Objects;
 
-@Component
-class PlainResourceBundleMessageConstructionStrategy implements MessageConstructionStrategy {
+import static com.github.constantinet.tradedatavalidator.ComponentNames
+        .PLAIN_RESOURCE_BUNDLE_MESSAGE_STRATEGY_QUALIFIER;
+
+@Component(PLAIN_RESOURCE_BUNDLE_MESSAGE_STRATEGY_QUALIFIER)
+public class PlainResourceBundleMessageConstructionStrategy implements MessageConstructionStrategy {
 
     private static final Logger LOG = LoggerFactory.getLogger(PlainResourceBundleMessageConstructionStrategy.class);
 
