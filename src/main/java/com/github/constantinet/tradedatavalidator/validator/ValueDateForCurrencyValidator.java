@@ -25,7 +25,7 @@ import static com.github.constantinet.tradedatavalidator.Properties.Names.VALUE_
 
 public class ValueDateForCurrencyValidator implements Validator {
 
-    private static final String FIXER_URL = "http://fixer.io/{1}?base={2}";
+    private static final String FIXER_URL = "http://api.fixer.io/{valueDate}?symbols={currency1},{currency2}";
 
     private static final Logger LOG = LoggerFactory.getLogger(ValueDateForCurrencyValidator.class);
 
@@ -71,43 +71,38 @@ public class ValueDateForCurrencyValidator implements Validator {
             final String currency1 = currencyPair.substring(0, 3);
             final String currency2 = currencyPair.substring(3, 6);
 
-            final LocalDate currencyDate1 = getDateForCurrency(valueDateString, currency1);
-            final LocalDate currencyDate2 = getDateForCurrency(valueDateString, currency2);
+            final LocalDate currencyDate1 = getDateForCurrencies(valueDateString, currency1, currency2);
 
             if (!valueDate.isEqual(currencyDate1)) {
-                messages.add(getNotValidMessage(currency1));
-            }
-
-            if (!valueDate.isEqual(currencyDate2)) {
-                messages.add(getNotValidMessage(currency2));
+                messages.add(getNotValidMessage(currencyPair));
             }
         }
 
         return new ValidationResult(messages.isEmpty(), messages);
     }
 
-    private LocalDate getDateForCurrency(final String valueDate, final String currency) {
+    private LocalDate getDateForCurrencies(final String valueDate, final String currency1, final String currency2) {
         final ResponseEntity<JSONObject> response = restTemplate.getForEntity(FIXER_URL,
-                JSONObject.class, valueDate, currency);
+                JSONObject.class, valueDate, currency1, currency2);
         if (response.getStatusCode() != HttpStatus.OK) {
             throw new RestClientException(
-                    "communication for " + currency + " has failed with " + response.getStatusCode());
+                    "communication for with has failed with " + response.getStatusCode());
         }
         final String currencyDateString = response.getBody().getString("date");
         return LocalDate.parse(currencyDateString, STANDARD_DATE_FORMATTER);
     }
 
-    private String getNotValidMessage(final String currency) {
+    private String getNotValidMessage(final String currencies) {
         return messageConstructionStrategy.constructMessage(
-                VALUE_DATE_NOT_VALID_FOR_CURRENCY_KEY,
+                VALUE_DATE_NOT_VALID_FOR_CURRENCIES_KEY,
                 NOT_VALID_MESSAGE,
-                new String[]{currency},
+                new String[]{currencies},
                 VALUE_DATE_PROPERTY_NAME);
     }
 
     private String getCanNotValidateMessage() {
         return messageConstructionStrategy.constructMessage(
-                VALUE_DATE_VALIDATION_AGAINST_CURRENCY_NOT_POSSIBLE_KEY,
+                VALUE_DATE_VALIDATION_AGAINST_CURRENCIES_NOT_POSSIBLE_KEY,
                 CAN_NOT_VALIDATE_KEY,
                 null,
                 VALUE_DATE_PROPERTY_NAME);

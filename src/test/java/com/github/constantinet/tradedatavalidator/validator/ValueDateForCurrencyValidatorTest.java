@@ -7,7 +7,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -43,9 +42,7 @@ public class ValueDateForCurrencyValidatorTest {
     @Test
     public void testValidate_shouldReturnSuccess_whenValueDateIsValidForCurrencyPair() {
         // given
-        when(restTemplate.getForEntity(anyString(), eq(JSONObject.class), eq("2016-01-02"), eq("EUR")))
-                .thenReturn(ResponseEntity.ok(new JSONObject("{\"date\": \"2016-01-02\"}")));
-        when(restTemplate.getForEntity(anyString(), eq(JSONObject.class), eq("2016-01-02"), eq("USD")))
+        when(restTemplate.getForEntity(anyString(), eq(JSONObject.class), eq("2016-01-02"), eq("EUR"), eq("USD")))
                 .thenReturn(ResponseEntity.ok(new JSONObject("{\"date\": \"2016-01-02\"}")));
         final JSONObject givenObject = new JSONObject("{\"ccyPair\": \"EURUSD\", \"valueDate\": \"2016-01-02\"}");
 
@@ -60,40 +57,14 @@ public class ValueDateForCurrencyValidatorTest {
     }
 
     @Test
-    public void testValidate_shouldReturnFailure_whenValueDateIsNotValidForCurrency1() {
+    public void testValidate_shouldReturnFailure_whenValueDateIsNotValidForCurrencies() {
         // given
         when(messageConstructionStrategy.constructMessage(
-                VALUE_DATE_NOT_VALID_FOR_CURRENCY_KEY,
+                VALUE_DATE_NOT_VALID_FOR_CURRENCIES_KEY,
                 NOT_VALID_MESSAGE,
-                new String[]{"EUR"},
+                new String[]{"EURUSD"},
                 VALUE_DATE_PROPERTY_NAME)).thenReturn("error");
-        when(restTemplate.getForEntity(anyString(), eq(JSONObject.class), eq("2016-01-02"), eq("EUR")))
-                .thenReturn(ResponseEntity.ok(new JSONObject("{\"date\": \"2016-01-01\"}")));
-        when(restTemplate.getForEntity(anyString(), eq(JSONObject.class), eq("2016-01-02"), eq("USD")))
-                .thenReturn(ResponseEntity.ok(new JSONObject("{\"date\": \"2016-01-02\"}")));
-        final JSONObject givenObject = new JSONObject("{\"ccyPair\": \"EURUSD\", \"valueDate\": \"2016-01-02\"}");
-
-        // when
-        final ValidationResult result = validator.validate(givenObject);
-
-        // then
-        assertThat(result, allOf(
-                hasProperty("succeeded", equalTo(false)),
-                hasProperty("failures", contains("error")))
-        );
-    }
-
-    @Test
-    public void testValidate_shouldReturnFailure_whenValueDateIsNotValidForCurrency2() {
-        // given
-        when(messageConstructionStrategy.constructMessage(
-                VALUE_DATE_NOT_VALID_FOR_CURRENCY_KEY,
-                NOT_VALID_MESSAGE,
-                new String[]{"USD"},
-                VALUE_DATE_PROPERTY_NAME)).thenReturn("error");
-        when(restTemplate.getForEntity(anyString(), eq(JSONObject.class), eq("2016-01-02"), eq("EUR")))
-                .thenReturn(ResponseEntity.ok(new JSONObject("{\"date\": \"2016-01-02\"}")));
-        when(restTemplate.getForEntity(anyString(), eq(JSONObject.class), eq("2016-01-02"), eq("USD")))
+        when(restTemplate.getForEntity(anyString(), eq(JSONObject.class), eq("2016-01-02"), eq("EUR"), eq("USD")))
                 .thenReturn(ResponseEntity.ok(new JSONObject("{\"date\": \"2016-01-01\"}")));
         final JSONObject givenObject = new JSONObject("{\"ccyPair\": \"EURUSD\", \"valueDate\": \"2016-01-02\"}");
 
@@ -108,40 +79,14 @@ public class ValueDateForCurrencyValidatorTest {
     }
 
     @Test
-    public void testValidate_shouldReturnFailure_whenCommunicationFailedCurrency1() {
-        // given
+    public void testValidate_shouldReturnFailure_whenCommunicationFailed() {
         when(messageConstructionStrategy.constructMessage(
-                VALUE_DATE_VALIDATION_AGAINST_CURRENCY_NOT_POSSIBLE_KEY,
+                VALUE_DATE_VALIDATION_AGAINST_CURRENCIES_NOT_POSSIBLE_KEY,
                 CAN_NOT_VALIDATE_KEY,
                 null,
                 VALUE_DATE_PROPERTY_NAME)).thenReturn("error");
-        when(restTemplate.getForEntity(anyString(), eq(JSONObject.class), eq("2016-01-02"), eq("EUR")))
-                .thenReturn(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
-        when(restTemplate.getForEntity(anyString(), eq(JSONObject.class), eq("2016-01-02"), eq("USD")))
-                .thenReturn(ResponseEntity.ok(new JSONObject("{\"date\": \"2016-01-02\"}")));
-        final JSONObject givenObject = new JSONObject("{\"ccyPair\": \"EURUSD\", \"valueDate\": \"2016-01-02\"}");
-
-        // when
-        final ValidationResult result = validator.validate(givenObject);
-
-        // then
-        assertThat(result, allOf(
-                hasProperty("succeeded", equalTo(false)),
-                hasProperty("failures", contains("error")))
-        );
-    }
-
-    @Test
-    public void testValidate_shouldReturnFailure_whenCommunicationFailedCurrency2() {
-        when(messageConstructionStrategy.constructMessage(
-                VALUE_DATE_VALIDATION_AGAINST_CURRENCY_NOT_POSSIBLE_KEY,
-                CAN_NOT_VALIDATE_KEY,
-                null,
-                VALUE_DATE_PROPERTY_NAME)).thenReturn("error");
-        when(restTemplate.getForEntity(anyString(), eq(JSONObject.class), eq("2016-01-02"), eq("EUR")))
-                .thenReturn(ResponseEntity.ok(new JSONObject("{\"date\": \"2016-01-02\"}")));
-        when(restTemplate.getForEntity(anyString(), eq(JSONObject.class), eq("2016-01-02"), eq("USD")))
-                .thenReturn(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
+        when(restTemplate.getForEntity(anyString(), eq(JSONObject.class), eq("2016-01-02"), eq("EUR"), eq("USD")))
+                .thenReturn(ResponseEntity.notFound().build());
         final JSONObject givenObject = new JSONObject("{\"ccyPair\": \"EURUSD\", \"valueDate\": \"2016-01-02\"}");
 
         // when
@@ -198,7 +143,7 @@ public class ValueDateForCurrencyValidatorTest {
     private void testMisformedJson(final String json) {
         // given
         when(messageConstructionStrategy.constructMessage(
-                VALUE_DATE_VALIDATION_AGAINST_CURRENCY_NOT_POSSIBLE_KEY,
+                VALUE_DATE_VALIDATION_AGAINST_CURRENCIES_NOT_POSSIBLE_KEY,
                 CAN_NOT_VALIDATE_KEY,
                 null,
                 VALUE_DATE_PROPERTY_NAME)).thenReturn("error");

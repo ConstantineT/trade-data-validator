@@ -9,10 +9,10 @@ public final class Messages {
         public static final String DATE_NOT_VALID_KEY = "message.dateNotValid";
         public static final String CAN_NOT_VALIDATE_KEY = "message.validationNotPossible";
 
-        public static final String VALUE_DATE_NOT_VALID_FOR_CURRENCY_KEY
-                = "message.valueDateNotValidForCurrency";
-        public static final String VALUE_DATE_VALIDATION_AGAINST_CURRENCY_NOT_POSSIBLE_KEY
-                = "message.valueDateAgainstCurrencyValidationNotPossible";
+        public static final String VALUE_DATE_NOT_VALID_FOR_CURRENCIES_KEY
+                = "message.valueDateNotValidForCurrencies";
+        public static final String VALUE_DATE_VALIDATION_AGAINST_CURRENCIES_NOT_POSSIBLE_KEY
+                = "message.valueDateAgainstCurrenciesValidationNotPossible";
 
         public static final String VALUE_DATE_BEFORE_TRADE_DATE_KEY
                 = "message.valueDateBeforeTradeDate";
