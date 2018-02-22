@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -166,6 +167,7 @@ public class TradeDataValidatorApplication {
     }
 
     public static void main(final String[] args) {
-        SpringApplication.run(TradeDataValidatorApplication.class, args);
+        final ConfigurableApplicationContext context = SpringApplication.run(TradeDataValidatorApplication.class, args);
+        context.registerShutdownHook();
     }
 }
