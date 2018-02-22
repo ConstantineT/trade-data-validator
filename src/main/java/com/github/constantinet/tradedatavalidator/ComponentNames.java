@@ -19,6 +19,8 @@ public final class ComponentNames {
     public static final String PREMIUM_DATE_BEFORE_DELIVERY_DATE_VALIDATOR_NAME = "premiumDateBeforeDeliveryDateInOptionsValidator";
     public static final String EXCERCISE_START_DATE_FOR_AMERICAN_STYLE_VALIDATOR_NAME = "exerciseStartDateForAmericanStyleValidator";
 
+    public static final String METRICS_CONSOLE_REFRESH_RATE = "metrics.reporters.console.refresh.seconds";
+
     private ComponentNames() {
         throw new AssertionError("Can not instantiate");
     }
