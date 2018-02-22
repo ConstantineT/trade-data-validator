@@ -20,6 +20,7 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    jcenter()
     maven {
         url "https://jitpack.io"
     }
@@ -28,7 +29,8 @@ repositories {
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-actuator')
     compile('org.springframework.boot:spring-boot-starter-web')
-    compile("org.springframework.boot:spring-boot-starter-security")
+    compile("io.springfox:springfox-swagger2:2.8.0")
+    compile("io.springfox:springfox-swagger-ui:2.8.0")
     compile('org.apache.commons:commons-lang3:3.7')
     compile('com.github.everit-org.json-schema:org.everit.json.schema:1.7.0')
     compile('org.json:json:20171018')
