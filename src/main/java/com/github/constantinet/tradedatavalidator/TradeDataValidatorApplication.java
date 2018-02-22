@@ -11,6 +11,7 @@ import com.github.constantinet.tradedatavalidator.formatvalidator.DateFormatVali
 import com.github.constantinet.tradedatavalidator.message.MessageConstructionStrategy;
 import com.github.constantinet.tradedatavalidator.validatabletype.ValidatableType;
 import com.github.constantinet.tradedatavalidator.validator.*;
+import io.swagger.annotations.Api;
 import org.everit.json.schema.FormatValidator;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,6 +24,11 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -40,7 +46,17 @@ import static com.github.constantinet.tradedatavalidator.Properties.Names.PREMIU
 import static com.github.constantinet.tradedatavalidator.Properties.Values.*;
 
 @SpringBootApplication
+@EnableSwagger2
 public class TradeDataValidatorApplication {
+
+    @Bean
+    public Docket api() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .select()
+                .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
+                .paths(PathSelectors.any())
+                .build();
+    }
 
     @Bean
     public ObjectMapper objectMapper() {
